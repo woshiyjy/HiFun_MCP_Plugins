@@ -65,12 +65,12 @@ async function installPi() {
   let settings = {};
   try { settings = JSON.parse(await readFile(destination, 'utf8')); }
   catch (error) { if (error.code !== 'ENOENT') throw new Error('Pi MCP 配置不能安全合并，请在 Pi Web 的 MCP 设置中导入本仓库 examples/pi-mcp.json。'); }
-  if (settings.mcpServers?.hifun_diagnosis) throw new Error('Pi 已有 hifun_diagnosis 配置；未覆盖，请在设置中核对。');
+  if (settings.mcpServers?.hifun_mcp || settings.mcpServers?.hifun_diagnosis) throw new Error('Pi 已有嗨番 MCP 配置；未覆盖，请按 README 的旧版升级说明核对。');
   const skillDir = path.join(dir, 'skills', 'hifun-image-diagnosis');
   await mkdir(skillDir, { recursive: true });
   await copyFile(path.join(pluginRoot, 'skills', 'image-diagnosis', 'SKILL.md'), path.join(skillDir, 'SKILL.md'), 1);
-  const config = { command: process.execPath, args: [path.join(pluginRoot, 'bundle', 'bridge.mjs')], timeout: 180, exposure: 'direct', description: '通过 HiFun MCP 诊断本次用户提供的番茄图片；凭证与图片字节由本机适配器处理。' };
-  settings.mcpServers = { ...settings.mcpServers, hifun_diagnosis: config };
+  const config = { command: process.execPath, args: [path.join(pluginRoot, 'bundle', 'bridge.mjs')], timeout: 180, exposure: 'direct', description: '嗨番 MCP 共享工具集合；当前提供图像诊断，凭证与图片字节由本机适配器处理。' };
+  settings.mcpServers = { ...settings.mcpServers, hifun_mcp: config };
   const temp = destination + '.' + randomUUID() + '.tmp';
   await writeFile(temp, JSON.stringify(settings, null, 2) + '\n', { mode: 0o600 });
   await rename(temp, destination);
@@ -110,9 +110,9 @@ export async function main() {
     console.log(JSON.stringify({ connected: true, service: 'HiFun_MCP_Server', tool: 'diagnose_image', skillVerified: true, skillBytes: Buffer.byteLength(skill), diagnosisSubmitted: false })); return;
   }
   if (command) throw new Error('未知命令；支持 --configure、--check、--install-pi。');
-  const server = new McpServer({ name: 'hifun-desktop-diagnosis', version: '0.1.0' }, { capabilities: { tools: {}, resources: {} } });
+  const server = new McpServer({ name: 'hifun-mcp', title: '嗨番 MCP', version: '0.1.1' }, { capabilities: { tools: {}, resources: {} } });
   server.registerTool('diagnose_image', {
-    title: 'HiFun MCP 番茄图片诊断',
+    title: '图像诊断',
     description: '通过 HiFun_MCP_Server 分析本次用户明确提供的番茄图片。只传图片绝对路径，本机适配器读取并发送图片字节；不要读取或发送凭证，不要自动重试。',
     inputSchema: z.object({ image_path: z.string().min(1).max(4096) }),
   }, async ({ image_path }) => {

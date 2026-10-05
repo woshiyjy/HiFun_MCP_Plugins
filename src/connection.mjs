@@ -39,7 +39,7 @@ export function createRemote(config, { fetcher = fetch, expectedDigest } = {}) {
     return packet.result;
   }
   async function withClient(fn) {
-    const client = new Client({ name: 'hifun-desktop-bridge', version: '0.1.0' });
+    const client = new Client({ name: 'hifun-desktop-bridge', version: '0.1.1' });
     try {
       await client.connect(new StreamableHTTPClientTransport(endpoint, { requestInit: { headers, redirect: 'error' }, fetch: fetcher }), { timeout: 15000 });
       const tools = await client.listTools();

@@ -1,12 +1,12 @@
-# HiFun MCP 插件
+# 嗨番 MCP
 
-在 Kimi Work 或本机 Pi Web 中，通过同一套 HiFun MCP 调用番茄图片诊断胶囊。唯一业务工具是 `diagnose_image`；模型只传图片路径，适配器读取图片并发送字节。服务凭证留在本机连接程序中。
+嗨番 MCP 是面向 Kimi Work 和本机 Pi Web 的共享工具集合，后续可以按版本增加通用能力。当前首期只有图像诊断，工具名 `diagnose_image` 意为“诊断图片”，不代表整个 MCP 的名称。模型只传图片路径，适配器读取图片并发送字节；服务凭证留在本机连接程序中。
 
 本仓库是客户端分发包。诊断服务由 HiFun 管理员运行；安装本插件不会在你的电脑上部署胶囊，也不需要云端密钥。需要 Node.js 22.19 或以上；仓库自带构建产物，使用者无需运行 `npm install`。
 
 ## 在 Kimi Work 安装
 
-将以下仓库链接交给 Kimi Work 的 Plugin Builder，要求导入并安装「HiFun 番茄图片诊断」：
+将以下仓库链接交给 Kimi Work 的 Plugin Builder，要求导入并安装「嗨番 MCP」：
 
 https://github.com/woshiyjy/HiFun_MCP_Plugins
 
@@ -33,7 +33,7 @@ node bundle/bridge.mjs --check
 node bundle/bridge.mjs --install-pi
 ```
 
-安装器向标准 `~/.pi/agent/mcp.json` 合并一个 `hifun_diagnosis` 条目，并安装本地兼容 Skill；保留既有条目，已有同名项时停止。适用于使用标准 Agent 目录的 Pi/Pi Web。如果 Pi Web 设置了独立 `PI_CODING_AGENT_DIR`，请在该实例的 MCP 设置中导入 [配置示例](examples/pi-mcp.json)，替换安装路径，并将本插件 Skill 加入该实例的 Skill 目录。
+安装器向标准 `~/.pi/agent/mcp.json` 合并一个 `hifun_mcp` 条目，并安装本地兼容 Skill；保留既有条目，已有同名项时停止。适用于使用标准 Agent 目录的 Pi/Pi Web。如果 Pi Web 设置了独立 `PI_CODING_AGENT_DIR`，请在该实例的 MCP 设置中导入 [配置示例](examples/pi-mcp.json)，替换安装路径，并将本插件 Skill 加入该实例的 Skill 目录。
 
 在 Pi Web 的 MCP 管理界面检查连接，重新加载或新建会话后测试。命令行 Pi 与 Pi Web 的 Runtime 版本可能不同，`pi mcp list` 通过只证明连接层，不代表浏览器会话已验收。
 
@@ -55,9 +55,13 @@ node bundle/bridge.mjs --reset-image /ABSOLUTE/PATH/image.jpg --confirmed
 
 ## 更新与卸载
 
+v0.1.1 将整体名称改为“嗨番 MCP”，连接标识改为 `hifun_mcp`；诊断工具仍叫 `diagnose_image`，专门的图像诊断 Skill 名称保持不变。
+
+若已经安装 v0.1.0：请在宿主设置中将原 `hifun_diagnosis` MCP 条目重命名为 `hifun_mcp`，保留原命令、参数和连接配置；Kimi Work 若不支持改名，请移除旧插件后导入新版，避免同时启用两份。无需重新配置本机凭证或清空调用状态。Pi 安装器发现旧条目会停止，请勿重复添加。
+
 更新插件后重新加载宿主。远程 Skill 通过正式 list/get/read 流程和 SHA256 验证，最长缓存五分钟；版本与本插件绑定的摘要不一致时，诊断停止并要求更新。宿主使用仓库中的本地兼容 Skill，这不表示 Kimi Work 或 Pi Web 已原生实现 MCP Skills 扩展自动激活。
 
-在宿主的插件/MCP 管理页停用或删除 `hifun_diagnosis` 即可停止调用；Pi 安装器加入的 Skill 名为 `hifun-image-diagnosis`。本机连接配置和调用状态在 `~/.config/hifun-mcp`，不会随公开插件分发。先核对待处理诊断，再决定是否删除本机状态；请勿直接打印其内容。
+在宿主的插件/MCP 管理页停用或删除 `hifun_mcp` 即可停止调用；Pi 安装器加入的 Skill 名为 `hifun-image-diagnosis`。本机连接配置和调用状态在 `~/.config/hifun-mcp`，不会随公开插件分发。先核对待处理诊断，再决定是否删除本机状态；请勿直接打印其内容。
 
 ## 开发与验证
 
