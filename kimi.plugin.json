@@ -1,0 +1,18 @@
+{
+  "name": "hifun-image-diagnosis",
+  "version": "0.1.0",
+  "description": "通过 HiFun 共享 MCP 调用番茄图像诊断胶囊。",
+  "homepage": "https://github.com/woshiyjy/HiFun_MCP_Plugins",
+  "author": "HiFun",
+  "skills": "./skills/",
+  "interface": { "displayName": "HiFun 番茄图片诊断", "shortDescription": "番茄图片症状评估与补图建议", "developerName": "HiFun" },
+  "mcpServers": {
+    "hifun_diagnosis": {
+      "command": "node",
+      "args": ["./bundle/bridge.mjs"],
+      "cwd": "./",
+      "toolTimeoutMs": 180000,
+      "enabledTools": ["diagnose_image"]
+    }
+  }
+}

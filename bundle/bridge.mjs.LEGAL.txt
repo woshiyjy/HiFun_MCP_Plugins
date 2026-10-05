@@ -1,0 +1,9 @@
+Bundled license information:
+
+@modelcontextprotocol/server/dist/src-BHSMhZ_W.mjs:
+@modelcontextprotocol/client/dist/src-xKF0PJN-.mjs:
+  /*!
+  * content-type
+  * Copyright(c) 2015 Douglas Christopher Wilson
+  * MIT Licensed
+  */

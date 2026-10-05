@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "hifun_diagnosis": {
+      "command": "node",
+      "args": [
+        "/ABSOLUTE/INSTALL/PATH/HiFun_MCP_Plugins/bundle/bridge.mjs"
+      ],
+      "timeout": 180,
+      "exposure": "direct",
+      "description": "通过 HiFun MCP 诊断用户明确提供的番茄图片；图片字节由本机适配器传递。"
+    }
+  }
+}

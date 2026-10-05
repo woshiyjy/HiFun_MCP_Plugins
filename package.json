@@ -1,0 +1,21 @@
+{
+  "name": "hifun-mcp-plugins",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.19.0" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm run build && npm test",
+    "configure": "node bundle/bridge.mjs --configure",
+    "check:connection": "node bundle/bridge.mjs --check",
+    "install:pi": "node bundle/bridge.mjs --install-pi"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.2.0",
+    "@modelcontextprotocol/server": "2.2.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": { "esbuild": "0.25.12" }
+}
